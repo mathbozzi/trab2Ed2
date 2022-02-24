@@ -1,0 +1,5 @@
+Running time (in sec.) vs. sorting algorithm
+
+Algorithm                   tale    moby
+System qsort                0.937   1.681
+MSD2: cut-off ins-sort      0.592   1.061
