@@ -6,12 +6,12 @@
 // Novo tipo de strings para evitar o inferno astral de ter de lidar com
 // array de char terminado por '\0'.
 typedef struct {
-    char *c;
-    int len;
+	char *c;
+	int len;
 } String;
 
 // Cria uma estrutura String a partir de uma string do C (terminada por '\0').
-String* create_string(char *cs);
+String *create_string(char *cs);
 
 // Libera a memória ocupada pela String.
 void destroy_string(String *s);
@@ -29,13 +29,13 @@ int compare(String *s, String *t);
 int compare_from(String *s, String *t, int d);
 
 // Cria um vetor vazio de ponteiros para String do tamanho dado.
-String** create_str_array(int N);
+String **create_str_array(int N);
 
 // Libera o vetor de Strings, incluindo o seu conteúdo.
-void destroy_str_array(String* *a, int N);
+void destroy_str_array(String **a, int N);
 
 // Exibe o vetor de Strings em stdout.
-void print_str_array(String* *a, int N);
+void print_str_array(String **a, int N);
 
 bool equals_substring(String *text, int from, int to, String *query);
 

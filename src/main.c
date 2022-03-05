@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "str.h"
 #include "suffix.h"
@@ -51,21 +52,39 @@ int main(int argc, char *argv[]) {
 	free(string);
 	fclose(arqv_de_entrada);
 
+	// -------------- (a) --------------------
 	Suffix **suffix = create_suf_array(finalString, len);
-	// print_suf_array(suffix, len);
-	clock_t init, final;
-	init = clock();
+	// print_suf_array(suffix, len); //descomentar
+	// -------------- (a) --------------------
+
+	// -------------- (o) --------------------
 	sort_suf_array(suffix, len);
+	// print_suf_array(suffix, len);
+	// -------------- (o) --------------------
+
+	// -------------- (r) --------------------
+	clock_t init, init2, final, final2;
+	init = clock();
+	sort_suf_array(suffix, len);  //metodo 1 (qsort)
 	final = clock();
 	// print_suf_array(suffix, len);
+	double time = ((double) final - init) / CLOCKS_PER_SEC;
+	printf("\n Ordenação qsort: %.3f\n", time);
+	init2 = clock();
+	// metodo 2 ainda falta fazer (ainda n sei)
+	final2 = clock();
+	// print_suf_array(suffix, len);
+	double time2 = ((double)final2 - init2) / CLOCKS_PER_SEC;
+	printf("\n Ordenação blbla: %.3f\n", time2);
+	// -------------- (r) --------------------
 
+	// -------------- (c) --------------------
+	int context = atoi(argv[3]);
 	String *query = create_string(argv[4]);
 	// print_string(query);
-	int context = atoi(argv[3]);
 
 	int r = rank(suffix, len, query);
 	// printf("%d", r);
-
 	for (int i = r; i < len; i++) {
 		int var, var2, var3;
 		if (query->len + suffix[i]->index > len) {
@@ -89,9 +108,48 @@ int main(int argc, char *argv[]) {
 		}
 		print_substring(finalString, var2, var3);
 	}
-	destroy_string(finalString);
+	// destroy_string(finalString);
 	destroy_string(query);
 	// destroy_suf_array(suffix, N);
+	// -------------- (c) --------------------
+
+	// -------------- (s) --------------------
+	char q[50];
+	scanf("%s", q);
+	String *queryScan = create_string(q);
+	while (queryScan->len > 0) {
+		int r = rank(suffix, len, queryScan);
+		// printf("%d", r);
+		for (int i = r; i < len; i++) {
+			int var, var2, var3;
+			if (queryScan->len + suffix[i]->index > len) {
+				var = len;
+			} else {
+				var = queryScan->len + suffix[i]->index > len;
+			}
+			if (!equals_substring(finalString, suffix[i]->index, var, queryScan)) {
+				break;
+			}
+
+			if (suffix[i]->index - context < 0) {
+				var2 = 0;
+			} else {
+				var2 = suffix[i]->index - context;
+			}
+			if ((queryScan->len + context + suffix[i]->index) > len) {
+				var3 = len;
+			} else {
+				var3 = (queryScan->len + context + suffix[i]->index);
+			}
+			print_substring(finalString, var2, var3);
+		}
+		destroy_string(queryScan);
+		scanf("%s", q);
+		queryScan = create_string(q);
+	}
+	// destroy_string(finalString);
+	// destroy_suf_array(suffix, N);
+	// -------------- (s) --------------------
 
 	return 0;
 }
